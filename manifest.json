@@ -2,19 +2,22 @@
     "manifest_version": 3,
     "name": "Better Image Search",
     "version": "1.0",
-    "description": "Sorts Google Image Search results by resolution. Only works on Exact Matches tab.",
+    "description": "Sorts Google Image Search results by resolution. Only works on the Exact Matches tab.",
     "permissions": [
-      "activeTab"
+      "activeTab",
+      "storage",
+      "tabs"
     ],
     "host_permissions": [
-      "https://www.developer.chrome.com/*"
+      "https://www.google.com/*"
     ],
     "action": {
       "default_icon": {
         "16": "icon.png",
         "48": "icon.png",
         "128": "icon.png"
-      }
+      },
+      "default_popup": "popup.html"
     },
     "content_scripts": [
       {

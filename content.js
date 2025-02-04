@@ -36,40 +36,44 @@ function getResolutionArea(element) {
    * filters to include only those that have a valid resolution, and then sorts them.
    */
   function sortElementsByResolution() {
-    const targetElement = document.querySelector('div[jsname="bVqjv"].YmvwI[selected]');
-    if (targetElement && targetElement.textContent.trim() === "Exact matches") {
-        // Adjust the selector to target the container element (using its class, id, etc.)
-        const container = document.querySelector(".dURPMd");
-        if (!container) {
-        console.warn('Container with class "dURPMd" not found.');
-        return;
-        }
-        
-        // Convert the container's children into an array.
-        const items = Array.from(container.children);
-        
-        // For each child element, compute its resolution area.
-        // Only children with a valid resolution (area > 0) will be included.
-        const itemsWithArea = items.map(item => ({
-        element: item,
-        area: getResolutionArea(item)
-        }));
-        
-        // Filter: only keep elements where a valid resolution was found.
-        const validItems = itemsWithArea.filter(item => item.area > 0);
-        
-        // Sort the valid items by resolution area in descending order (highest resolution first).
-        validItems.sort((a, b) => b.area - a.area);
-        
-        // (Optional) If you want to place items without a valid resolution separately,
-        // you could also process them here.
-        
-        // Remove all current children from the container.
-        container.innerHTML = '';
-        
-        // Append the sorted items back into the container.
-        validItems.forEach(item => container.appendChild(item.element));
-    }
+    chrome.storage.local.get('sortingEnabled', function(data) {
+      if (!data.sortingEnabled) return;
+
+      const targetElement = document.querySelector('div[jsname="bVqjv"].YmvwI[selected]');
+      if (targetElement && targetElement.textContent.trim() === "Exact matches") {
+          // Adjust the selector to target the container element (using its class, id, etc.)
+          const container = document.querySelector(".dURPMd");
+          if (!container) {
+          console.warn('Container with class "dURPMd" not found.');
+          return;
+          }
+          
+          // Convert the container's children into an array.
+          const items = Array.from(container.children);
+          
+          // For each child element, compute its resolution area.
+          // Only children with a valid resolution (area > 0) will be included.
+          const itemsWithArea = items.map(item => ({
+          element: item,
+          area: getResolutionArea(item)
+          }));
+          
+          // Filter: only keep elements where a valid resolution was found.
+          const validItems = itemsWithArea.filter(item => item.area > 0);
+          
+          // Sort the valid items by resolution area in descending order (highest resolution first).
+          validItems.sort((a, b) => b.area - a.area);
+          
+          // (Optional) If you want to place items without a valid resolution separately,
+          // you could also process them here.
+          
+          // Remove all current children from the container.
+          container.innerHTML = '';
+          
+          // Append the sorted items back into the container.
+          validItems.forEach(item => container.appendChild(item.element));
+      }
+    });
   }
   
 sortElementsByResolution();
